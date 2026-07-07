@@ -59,17 +59,6 @@ function sanitiseErrorResponse(responseText: string, maxLength = 500): string {
 }
 
 /**
- * Encodes a query parameter value safely.
- * Arrays are JSON-encoded, strings with special characters are preserved.
- */
-function encodeQueryValue(value: string | string[] | number | boolean): string {
-  if (Array.isArray(value)) {
-    return JSON.stringify(value);
-  }
-  return String(value);
-}
-
-/**
  * Makes an authenticated request to the Sandbox Studio API.
  * Automatically handles:
  * - Token refresh on 401
@@ -91,7 +80,13 @@ export async function apiRequest<T = unknown>(
   if (query) {
     for (const [key, value] of Object.entries(query)) {
       if (value === undefined || value === null) continue;
-      url.searchParams.set(key, encodeQueryValue(value));
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          url.searchParams.append(key, String(item));
+        }
+      } else {
+        url.searchParams.set(key, String(value));
+      }
     }
   }
 
