@@ -41,6 +41,13 @@ import { logger } from "./logger.js";
  */
 
 async function main() {
+  // Handle 'init' subcommand
+  if (process.argv[2] === "init") {
+    const { runInit } = await import("./init-config.js");
+    await runInit();
+    return;
+  }
+
   const config = loadConfig();
 
   // Fetch token and determine user role

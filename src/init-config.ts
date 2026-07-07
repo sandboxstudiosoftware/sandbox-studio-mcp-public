@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Interactive config initializer for sandbox-studio-mcp.
- * Usage: node dist/init-config.js
+ * Usage: npx sandbox-studio-mcp init
  */
 
 import { createInterface } from "node:readline";
@@ -15,7 +15,7 @@ function ask(question: string): Promise<string> {
   });
 }
 
-async function main() {
+export async function runInit() {
   console.log("Sandbox Studio MCP - Configuration Setup\n");
 
   if (configExists()) {
@@ -29,7 +29,7 @@ async function main() {
     }
   }
 
-  const instanceUrl = await ask("Instance URL (e.g. https://sandbox.example.com): ");
+  const instanceUrl = await ask("Instance URL (e.g. https://sandbox.example.com/api): ");
   const clientId = await ask("Client ID: ");
   const clientSecret = await ask("Client Secret: ");
 
@@ -49,7 +49,10 @@ async function main() {
   rl.close();
 }
 
-main().catch((err) => {
-  console.error("Error:", err.message);
-  process.exit(1);
-});
+// Allow direct execution
+if (process.argv[1]?.endsWith("init-config.js")) {
+  runInit().catch((err) => {
+    console.error("Error:", err.message);
+    process.exit(1);
+  });
+}

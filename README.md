@@ -2,6 +2,14 @@
 
 A local [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that connects AI assistants to the [Sandbox Studio](https://sandboxstudiosoftware.com) API. This lets you manage AWS sandbox accounts, leases, templates, events, and settings through natural language conversations.
 
+## Install
+
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=sandbox-studio&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22sandbox-studio-mcp%22%5D%7D)
+[![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=sandbox-studio&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22sandbox-studio-mcp%22%5D%7D&quality=insiders)
+[![Install in Cursor](https://img.shields.io/badge/Cursor-Install_Server-000000?style=flat-square&logo=cursor&logoColor=white)](cursor://anysphere.cursor-deeplink/mcp/install?name=sandbox-studio&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22sandbox-studio-mcp%22%5D%7D)
+
+> After installing, run `npx sandbox-studio-mcp init` to configure your credentials.
+
 ## What is this?
 
 Sandbox Studio is a platform for managing temporary AWS accounts — useful for training, labs, hackathons, and development sandboxes. This MCP server exposes the full Sandbox Studio API as tools that AI assistants (Claude, Kiro, Cursor, etc.) can call on your behalf.
@@ -40,38 +48,24 @@ Sandbox Studio is a platform for managing temporary AWS accounts — useful for 
 
 ## Quick Start
 
-### 1. Install and build
+### 1. Configure credentials
 
 ```bash
-git clone <repo-url>
-cd sandbox-studio-mcp
-pnpm install
-pnpm build
+npx sandbox-studio-mcp init
 ```
 
-### 2. Configure credentials
+This will prompt you for:
+- **Instance URL** — your Sandbox Studio API endpoint (e.g. `https://sandbox.example.com/api`)
+- **Client ID** — from your OAuth client in the Sandbox Studio admin panel
+- **Client Secret** — from your OAuth client
 
-Run the interactive setup:
+> To create OAuth credentials, go to your Sandbox Studio admin panel → API Clients → Create new client.
 
-```bash
-node dist/init-config.js
-```
+### 2. Connect to your AI assistant
 
-Or create `~/.sandbox-studio-mcp/config.json` manually:
+### 2. Connect to your AI assistant
 
-```json
-{
-  "instanceUrl": "https://your-instance.example.com/api",
-  "clientId": "your-client-id",
-  "clientSecret": "your-client-secret"
-}
-```
-
-> **Note:** The `instanceUrl` should include the `/api` suffix. The config file is created with `0600` permissions (owner-only read/write).
-
-### 3. Connect to your AI assistant
-
-#### Kiro CLI
+#### Kiro
 
 Add to `~/.kiro/settings/mcp.json`:
 
@@ -79,8 +73,8 @@ Add to `~/.kiro/settings/mcp.json`:
 {
   "mcpServers": {
     "sandbox-studio": {
-      "command": "node",
-      "args": ["/path/to/sandbox-studio-mcp/dist/index.js"]
+      "command": "npx",
+      "args": ["-y", "sandbox-studio-mcp"]
     }
   }
 }
@@ -89,21 +83,36 @@ Add to `~/.kiro/settings/mcp.json`:
 #### Claude Code
 
 ```bash
-claude mcp add sandbox-studio -- node /path/to/sandbox-studio-mcp/dist/index.js
+claude mcp add sandbox-studio -- npx -y sandbox-studio-mcp
 ```
 
-#### Cursor / VS Code
+#### Cursor / VS Code (manual)
 
-Add to your MCP settings:
+Add to your MCP settings (or use the one-click badges above):
 
 ```json
 {
   "mcp": {
     "servers": {
       "sandbox-studio": {
-        "command": "node",
-        "args": ["/path/to/sandbox-studio-mcp/dist/index.js"]
+        "command": "npx",
+        "args": ["-y", "sandbox-studio-mcp"]
       }
+    }
+  }
+}
+```
+
+#### Codex
+
+Add to `~/.codex/config.json`:
+
+```json
+{
+  "mcpServers": {
+    "sandbox-studio": {
+      "command": "npx",
+      "args": ["-y", "sandbox-studio-mcp"]
     }
   }
 }
