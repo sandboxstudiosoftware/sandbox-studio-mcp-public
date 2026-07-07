@@ -63,8 +63,6 @@ This will prompt you for:
 
 ### 2. Connect to your AI assistant
 
-### 2. Connect to your AI assistant
-
 #### Kiro
 
 Add to `~/.kiro/settings/mcp.json`:
