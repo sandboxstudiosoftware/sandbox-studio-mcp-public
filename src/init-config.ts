@@ -29,7 +29,7 @@ export async function runInit() {
     }
   }
 
-  const instanceUrl = await ask("Instance URL (e.g. https://sandbox.example.com/api): ");
+  const instanceUrl = await ask("Instance URL (e.g. https://sandbox.example.com): ");
   const clientId = await ask("Client ID: ");
   const clientSecret = await ask("Client Secret: ");
 
@@ -40,7 +40,7 @@ export async function runInit() {
   }
 
   saveConfig({
-    instanceUrl: instanceUrl.replace(/\/+$/, ""),
+    instanceUrl: instanceUrl.replace(/\/+$/, "").replace(/\/api$/, ""),
     clientId,
     clientSecret,
   });

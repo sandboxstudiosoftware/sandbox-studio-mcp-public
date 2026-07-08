@@ -72,10 +72,10 @@ export async function apiRequest<T = unknown>(
 ): Promise<T> {
   const { method, path, body, query } = options;
 
-  // Ensure path is appended to instanceUrl (including any base path like /api)
+  // Ensure path is appended to instanceUrl with /api prefix
   const baseUrl = config.instanceUrl.replace(/\/+$/, "");
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  const url = new URL(`${baseUrl}${normalizedPath}`);
+  const url = new URL(`${baseUrl}/api${normalizedPath}`);
 
   if (query) {
     for (const [key, value] of Object.entries(query)) {

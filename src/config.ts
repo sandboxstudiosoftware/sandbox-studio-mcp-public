@@ -29,7 +29,7 @@ export function loadConfig(): Config {
         `Expected format:\n` +
         JSON.stringify(
           {
-            instanceUrl: "https://your-instance.example.com/api",
+            instanceUrl: "https://your-instance.example.com",
             clientId: "your-client-id",
             clientSecret: "your-client-secret",
           },
@@ -57,10 +57,13 @@ export function loadConfig(): Config {
     throw new Error(`Invalid configuration in ${CONFIG_FILE}:\n${issues}`);
   }
 
-  // Normalize: strip trailing slash from instanceUrl
+  // Normalize: strip trailing slash and remove /api suffix if present (backward compat)
+  let instanceUrl = result.data.instanceUrl.replace(/\/+$/, "");
+  instanceUrl = instanceUrl.replace(/\/api$/, "");
+
   return {
     ...result.data,
-    instanceUrl: result.data.instanceUrl.replace(/\/+$/, ""),
+    instanceUrl,
   };
 }
 

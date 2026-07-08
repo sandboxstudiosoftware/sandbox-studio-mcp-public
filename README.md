@@ -55,7 +55,7 @@ npx sandbox-studio-mcp init
 ```
 
 This will prompt you for:
-- **Instance URL** — your Sandbox Studio API endpoint (e.g. `https://sandbox.example.com/api`)
+- **Instance URL** — your Sandbox Studio base URL (e.g. `https://sandbox.example.com`)
 - **Client ID** — from your OAuth client in the Sandbox Studio admin panel
 - **Client Secret** — from your OAuth client
 
@@ -151,7 +151,7 @@ When templates or leases are created, the response includes a `_link` field with
 
 The server uses the OAuth2 **client credentials** grant flow:
 
-1. On first API call, it requests a token from `{instanceUrl}/oauth/token`
+1. On first API call, it requests a token from `{instanceUrl}/api/oauth/token`
 2. The token is cached in memory with a 60-second refresh buffer
 3. On 401 responses, it automatically clears the cache and retries
 4. HTML responses (login page redirects) are detected and trigger a token refresh
@@ -332,7 +332,7 @@ This is the primary mechanism for shaping how AI assistants use your tools.
 
 | Problem | Solution |
 |---------|----------|
-| HTML responses instead of JSON | Check that `instanceUrl` in config includes `/api` |
+| HTML responses instead of JSON | Check that `instanceUrl` in config is correct (e.g. `https://sandbox.example.com` without a trailing path) |
 | 401 errors | Verify client credentials are valid and the OAuth client is active |
 | Token refresh loops | The OAuth client may have been deleted — recreate in admin panel |
 | Tools not appearing | Rebuild (`pnpm build`) and restart the MCP server |

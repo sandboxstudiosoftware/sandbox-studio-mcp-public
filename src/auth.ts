@@ -26,7 +26,7 @@ export async function getAccessToken(config: Config): Promise<string> {
     return cachedToken.accessToken;
   }
 
-  const tokenUrl = `${config.instanceUrl}/oauth/token`;
+  const tokenUrl = `${config.instanceUrl}/api/oauth/token`;
 
   const body = new URLSearchParams({
     grant_type: "client_credentials",
